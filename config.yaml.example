@@ -1,0 +1,9 @@
+database:
+  dsn: "host=localhost user=postgres password=123456 dbname=xxxxx port=5432 sslmode=disable"
+
+redis:
+  addr: "localhost:6379"
+  ttl: 86400
+
+jwt:
+  secret: "change_me_in_prod"

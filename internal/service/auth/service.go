@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"go-template/internal/domain/auth"
 	"go-template/internal/domain/session"
 	"go-template/internal/domain/user"
@@ -21,7 +22,7 @@ func NewService(u user.Repository, st session.Store, j *shared.JWT) auth.Service
 	return &service{userRepo: u, sessionStore: st, jwt: j}
 }
 
-func (r *service) Register(username, email, password string) error {
+func (r *service) Register(ctx context.Context, username, email, password string) error {
 
 	username = strings.TrimSpace(username)
 	email = strings.ToLower(strings.TrimSpace(email))
@@ -42,7 +43,7 @@ func (r *service) Register(username, email, password string) error {
 	})
 }
 
-func (r *service) Login(username, password string) (string, error) {
+func (r *service) Login(ctx context.Context, username, password string) (string, error) {
 	u, err := r.userRepo.FindByUsername(username)
 	if err != nil {
 		return "", err

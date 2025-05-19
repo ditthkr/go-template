@@ -1,6 +1,7 @@
 package auth_test
 
 import (
+	"context"
 	"github.com/golang/mock/gomock"
 	"go-template/internal/shared"
 	"go-template/internal/shared/errs"
@@ -25,7 +26,7 @@ func TestAuthService_Register(t *testing.T) {
 		userRepo.EXPECT().ExistsEmail("test@example.com").Return(false, nil)
 		userRepo.EXPECT().Save(gomock.Any()).Return(nil)
 
-		err := service.Register("testuser", "test@example.com", "Password123")
+		err := service.Register(context.Background(), "testuser", "test@example.com", "Password123")
 		assert.NoError(t, err)
 	})
 
@@ -40,7 +41,7 @@ func TestAuthService_Register(t *testing.T) {
 
 		userRepo.EXPECT().ExistsUsername("testuser").Return(true, nil)
 
-		err := service.Register("testuser", "test@example.com", "Password123")
+		err := service.Register(context.Background(), "testuser", "test@example.com", "Password123")
 
 		assert.Error(t, err)
 		assert.Equal(t, errs.ErrDuplicateUsername, err)
@@ -60,7 +61,7 @@ func TestAuthService_Register(t *testing.T) {
 		userRepo.EXPECT().ExistsUsername("testuser").Return(false, nil)
 		userRepo.EXPECT().ExistsEmail("test@example.com").Return(true, nil)
 
-		err := service.Register("testuser", "test@example.com", "Password123")
+		err := service.Register(context.Background(), "testuser", "test@example.com", "Password123")
 
 		assert.Error(t, err)
 		assert.Equal(t, errs.ErrDuplicateEmail, err)
